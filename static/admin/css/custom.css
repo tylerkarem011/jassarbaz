@@ -1,0 +1,46 @@
+/* ==================== ПОЛНОЕ УДАЛЕНИЕ ЛОГОТИПА ОТОВСЮДУ ==================== */
+
+/* Скрываем логотип в сайдбаре */
+.brand-link img,
+.site-logo img,
+.navbar-brand img {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+/* Скрываем весь блок с логотипом в сайдбаре */
+.brand-link {
+    padding: 15px 20px !important;
+}
+
+/* Полностью убираем логотип на странице входа */
+body.login-page .login-logo,
+.login-page .login-logo,
+.login-box .login-logo,
+.login-logo,
+.login-logo img {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.login-page {
+    background: #1a1d23 !important;
+}
+
+.login-box {
+    margin: 140px auto !important;
+    float: none !important;
+    width: 380px !important;
+}
+
+.login-box .card {
+    border-radius: 16px !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
+    border: none !important;
+}
