@@ -94,13 +94,14 @@ MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ==================== БАЗА ДАННЫХ (Render) ====================
-import dj_database_url
-
+# ==================== БАЗА ДАННЫХ ====================
 if os.environ.get('DATABASE_URL'):
-    # На Render (PostgreSQL)
+    # Supabase / Render
     DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
     # Локально (SQLite)
