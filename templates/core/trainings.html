@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% block title %}Жаттығулар — Jas Sarbaz{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- ==================== ЖАТТЫҒУЛАР ТІЗІМІ ==================== -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Жаттығулар кестесі</h2>
+        <p class="text-muted">Қазіргі уақыттағы жаттығулар</p>
+    </div>
+
+    {% if trainings %}
+        <div class="row g-4">
+            {% for training in trainings %}
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100" style="border-radius: 18px; overflow: hidden;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="fw-bold mb-1">{{ training.title }}</h5>
+                                <small class="text-muted">{{ training.date|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            
+                            {% if training.status == 'planned' %}
+                                <span class="badge bg-primary px-3 py-2">Жоспарда</span>
+                            {% elif training.status == 'ongoing' %}
+                                <span class="badge bg-warning text-dark px-3 py-2">Жүріп жатыр</span>
+                            {% else %}
+                                <span class="badge bg-success px-3 py-2">Аяқталды</span>
+                            {% endif %}
+                        </div>
+
+                        <p class="text-muted mb-3">{{ training.description|truncatechars:140 }}</p>
+
+                        <div class="d-flex flex-wrap gap-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-tie text-primary me-2"></i>
+                                <small><strong>{{ training.instructor }}</strong></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                <small>{{ training.location }}</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-primary me-2"></i>
+                                <small>{{ training.duration }} мин</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted">Қатысушылар</small><br>
+                                <strong>{{ training.max_participants }} орын</strong>
+                            </div>
+                            
+                            <!-- Кнопка теперь ведёт на вступление в клуб -->
+                            <a href="https://forms.gle/wMn8AdXJn1FP6tZ96" 
+                               target="_blank"
+                               class="btn btn-outline-primary btn-sm px-4">
+                                <i class="fas fa-user-plus me-1"></i> Қосылу
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-dumbbell fa-4x text-muted mb-3"></i>
+            <h5 class="text-muted">Әлі жаттығулар жоқ</h5>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

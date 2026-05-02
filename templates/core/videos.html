@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+{% block title %}Видео - Jas Sarbaz{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-video"></i> Видео архивы</h2>
+</div>
+
+{% if videos %}
+    <div class="row g-4">
+        {% for video in videos %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body p-0">
+                    
+                    {% if video.video_file %}
+                        <!-- Локальное видео -->
+                        <video width="100%" height="340" controls class="w-100 rounded-top">
+                            <source src="{{ video.video_file.url }}" type="video/mp4">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    {% elif video.video_url %}
+                        <!-- YouTube -->
+                        <div class="ratio ratio-16x9">
+                            <iframe 
+                                src="{{ video.video_url }}" 
+                                frameborder="0" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ video.title }}</h5>
+                    <small class="text-muted">
+                        {{ video.upload_date|date:"d.m.Y H:i" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-video fa-5x text-muted mb-4"></i>
+        <h4>Видео әлі қосылмаған</h4>
+        <p class="text-muted">Админ-панель арқылы видео қосыңыз</p>
+    </div>
+{% endif %}
+{% endblock %}

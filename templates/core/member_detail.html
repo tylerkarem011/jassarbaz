@@ -1,0 +1,285 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}{{ member.full_name }} — Jas Sarbaz{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Кнопка назад -->
+    <a href="{% url 'member_list' %}" class="btn btn-light mb-4 px-4 py-2 rounded-pill shadow-sm">
+        <i class="fas fa-arrow-left me-2"></i> Тізімге қайту
+    </a>
+
+    <div class="row g-4">
+
+        <!-- ЛЕВАЯ КОЛОНКА -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-lg h-100" style="border-radius: 24px; overflow: hidden;">
+                
+                <!-- Фото -->
+                <div class="text-center pt-4 pb-3" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+                    {% if member.photo %}
+                        <img src="{{ member.photo.url }}" 
+                             class="rounded-4 shadow" 
+                             style="width: 180px; height: 180px; object-fit: cover; border: 8px solid white;">
+                    {% else %}
+                        <div class="rounded-4 shadow d-flex align-items-center justify-content-center mx-auto" 
+                             style="width: 180px; height: 180px; background: #dee2e6; border: 8px solid white;">
+                            <i class="fas fa-user fa-6x text-secondary"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="card-body text-center px-4 pb-4">
+                    <h3 class="fw-bold mb-1">{{ member.full_name }}</h3>
+                    
+                    {% if member.member_type == 'commander' %}
+                        <span class="badge bg-success px-3 py-2 mb-3" style="font-size: 0.95rem;">Бөлімше командирі</span>
+                    {% else %}
+                        <span class="badge bg-secondary px-3 py-2 mb-3" style="font-size: 0.95rem;">Сарбаз</span>
+                    {% endif %}
+
+                    <!-- Большой средний балл -->
+                    <div class="my-4">
+                        <div class="text-muted small">ОРТАША КӨРСЕТКІШ</div>
+                        <div class="display-4 fw-bold text-primary" style="line-height: 1;">
+                            {% widthratio member.drill_score|add:member.shooting_score|add:member.tactical_score|add:member.first_aid_score|add:member.navigation_score|add:member.patriotism_score 30 100 %}%
+                        </div>
+                    </div>
+
+                    <!-- Информация -->
+                    <div class="text-start small">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-id-card text-primary me-3" style="width: 20px;"></i>
+                            <div>
+                                <div class="text-muted">Студенттік ID</div>
+                                <strong>{{ member.student_id }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-users text-primary me-3" style="width: 20px;"></i>
+                            <div>
+                                <div class="text-muted">Оқу тобы</div>
+                                <strong>{{ member.group }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-birthday-cake text-primary me-3" style="width: 20px;"></i>
+                            <div>
+                                <div class="text-muted">Туған күні</div>
+                                <strong>{{ member.birth_date|date:"d.m.Y" }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-calendar-check text-primary me-3" style="width: 20px;"></i>
+                            <div>
+                                <div class="text-muted">Клубқа мүше</div>
+                                <strong>{{ member.join_date|date:"d.m.Y" }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кнопка сертификата -->
+                    <div class="mt-4">
+                        <a href="{% url 'generate_certificate' member.pk %}" 
+                           class="btn btn-primary w-100 py-3 rounded-pill fw-semibold">
+                            <i class="fas fa-file-pdf me-2"></i> СЕРТИФИКАТ ДАЙЫНДАУ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА -->
+        <div class="col-lg-8">
+
+            <!-- РАДАР ЧАРТ -->
+            <div class="card border-0 shadow-lg mb-4" style="border-radius: 24px;">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-chart-line text-primary me-2 fa-lg"></i>
+                        <h5 class="mb-0 fw-bold">Құзыреттілік радары</h5>
+                        <small class="text-muted ms-2">Диаграмма бойынша талдау</small>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <canvas id="radarChart" height="280"></canvas>
+                </div>
+            </div>
+
+            <!-- НАВЫКИ (ПРОГРЕСС БАРЫ) -->
+            <div class="card border-0 shadow-lg mb-4" style="border-radius: 24px;">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-primary me-2 fa-lg"></i>
+                        <h5 class="mb-0 fw-bold">Құзыреттілік паспорты</h5>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- Саптық -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Саптық дайындық</span>
+                            <span class="fw-bold text-primary">{% widthratio member.drill_score 5 100 %}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 20px;">
+                            <div class="progress-bar bg-primary" style="width: {% widthratio member.drill_score 5 100 %}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Атыс -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Атыс дайындығы</span>
+                            <span class="fw-bold text-danger">{% widthratio member.shooting_score 5 100 %}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 20px;">
+                            <div class="progress-bar bg-danger" style="width: {% widthratio member.shooting_score 5 100 %}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Тактика -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Тактикалық дайындық</span>
+                            <span class="fw-bold text-warning">{% widthratio member.tactical_score 5 100 %}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 20px;">
+                            <div class="progress-bar bg-warning" style="width: {% widthratio member.tactical_score 5 100 %}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Алғашқы көмек -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Алғашқы көмек</span>
+                            <span class="fw-bold text-info">{% widthratio member.first_aid_score 5 100 %}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 20px;">
+                            <div class="progress-bar bg-info" style="width: {% widthratio member.first_aid_score 5 100 %}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Бағдарлау -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Бағдарлау</span>
+                            <span class="fw-bold text-success">{% widthratio member.navigation_score 5 100 %}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 20px;">
+                            <div class="progress-bar bg-success" style="width: {% widthratio member.navigation_score 5 100 %}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Патриотизм -->
+                    <div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Патриотизм</span>
+                            <span class="fw-bold text-dark">{% widthratio member.patriotism_score 5 100 %}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 20px;">
+                            <div class="progress-bar bg-dark" style="width: {% widthratio member.patriotism_score 5 100 %}%;"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ==================== ЖЕТІСТІКТЕР ==================== -->
+            <div class="card border-0 shadow-lg" style="border-radius: 24px;">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-trophy text-warning me-2 fa-lg"></i>
+                        <h5 class="mb-0 fw-bold">Жетістіктер</h5>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    {% if member.achievements.all %}
+                        <div class="row g-3">
+                            {% for ach in member.achievements.all %}
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start p-3 border rounded-3 bg-light">
+                                    <div class="me-3">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 48px; height: 48px; background: linear-gradient(135deg, #ffc107, #ff8c00);">
+                                            <i class="fas {{ ach.icon }} text-white fa-lg"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold mb-1">{{ ach.title }}</h6>
+                                        <small class="text-muted d-block mb-2">{{ ach.date|date:"d.m.Y" }}</small>
+                                        <p class="mb-0 text-muted small">{{ ach.description|truncatechars:70 }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-trophy fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">Әлі жетістіктер жоқ</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('radarChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Саптық', 'Атыс', 'Тактика', 'Алғашқы көмек', 'Бағдарлау', 'Патриотизм'],
+                datasets: [{
+                    label: 'Құзыреттілік',
+                    data: [
+                        {% widthratio member.drill_score 5 100 %},
+                        {% widthratio member.shooting_score 5 100 %},
+                        {% widthratio member.tactical_score 5 100 %},
+                        {% widthratio member.first_aid_score 5 100 %},
+                        {% widthratio member.navigation_score 5 100 %},
+                        {% widthratio member.patriotism_score 5 100 %}
+                    ],
+                    backgroundColor: 'rgba(13, 110, 253, 0.2)',
+                    borderColor: '#0d6efd',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#0d6efd',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#0d6efd'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 100,
+                        ticks: { stepSize: 20, display: false },
+                        grid: { color: '#dee2e6' },
+                        angleLines: { color: '#dee2e6' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

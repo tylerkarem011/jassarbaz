@@ -1,0 +1,117 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Жаңалықтар — Jas Sarbaz{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Заголовок -->
+    <div class="text-center mb-2">
+    <img src="{% static 'images/news.png' %}" 
+         alt="Жаңалықтар" 
+         style="max-height: 160px; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));">
+    </div>
+        <p class="text-muted fs-5 text-center">Жас Сарбаз клубының соңғы жаңалықтары</p>
+    </div>
+
+    {% if news_list %}
+        <div class="row g-4">
+            {% for news in news_list %}
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100 news-card" style="border-radius: 18px; overflow: hidden; transition: transform 0.3s ease;">
+                    
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" class="card-img-top" style="height: 240px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 240px;">
+                            <i class="fas fa-newspaper fa-4x text-muted"></i>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge 
+                                {% if news.category == 'general' %}bg-primary
+                                {% elif news.category == 'training' %}bg-success
+                                {% elif news.category == 'achievement' %}bg-warning text-dark
+                                {% else %}bg-info{% endif %}">
+                                {{ news.get_category_display }}
+                            </span>
+                            <small class="text-muted">{{ news.date|date:"d.m.Y" }}</small>
+                        </div>
+
+                        <h5 class="fw-bold mb-3">{{ news.title }}</h5>
+                        
+                        <p class="text-muted mb-4">{{ news.content|truncatechars:160 }}</p>
+
+                        <button onclick="showNewsModal({{ forloop.counter0 }})" 
+                                class="btn btn-outline-primary btn-sm px-4">
+                            <i class="fas fa-book-open me-1"></i> Толығырақ
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-newspaper fa-4x text-muted mb-3"></i>
+            <h5 class="text-muted">Әлі жаңалықтар жоқ</h5>
+        </div>
+    {% endif %}
+
+</div>
+
+<!-- Модальное окно для полной новости -->
+<div class="modal fade" id="newsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 18px;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Контент заполняется через JS -->
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Жабу</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const newsData = [
+    {% for n in news_list %}
+    {
+        title: "{{ n.title|escapejs }}",
+        content: "{{ n.content|escapejs|linebreaksbr }}",
+        date: "{{ n.date|date:'d.m.Y' }}",
+        category: "{{ n.get_category_display }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+function showNewsModal(index) {
+    const news = newsData[index];
+    document.getElementById('modalTitle').innerHTML = news.title;
+    document.getElementById('modalBody').innerHTML = `
+        <div class="mb-3">
+            <span class="badge bg-primary">${news.category}</span>
+            <small class="text-muted ms-2">${news.date}</small>
+        </div>
+        <div style="line-height: 1.7; font-size: 1.05rem;">
+            ${news.content}
+        </div>
+    `;
+    new bootstrap.Modal(document.getElementById('newsModal')).show();
+}
+</script>
+
+<style>
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}
+</style>
+{% endblock %}

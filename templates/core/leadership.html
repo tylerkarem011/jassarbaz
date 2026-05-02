@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Басшылық — Jas Sarbaz{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Большое лого вверху -->
+    <div class="text-center mb-4">
+        <img src="{% static 'images/лого2.png' %}" 
+             alt="Jas Sarbaz" 
+             style="max-height: 160px; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15));">
+    </div>
+
+    <!-- Заголовок -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-5 mb-2" style="letter-spacing: -1px;">Басшылық</h1>
+        <p class="text-muted fs-5">ИТК Жас Сарбаз әскери-патриоттық клубының басшылары</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+        <!-- Руководитель клуба -->
+        <div class="col-lg-5 col-md-6">
+            <div class="card border-0 shadow-lg h-100 leadership-card" 
+                 style="border-radius: 22px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                
+                <div class="text-center pt-4 pb-3" style="background: linear-gradient(135deg, #0d6efd, #003087);">
+                    <div class="mx-auto mb-3 position-relative" style="width: 150px; height: 150px;">
+                        <img src="{% static 'images/ahan.jpg' %}" 
+                             alt="Ахан Асқар Дайырғазыұлы"
+                             class="rounded-circle shadow"
+                             style="width: 150px; height: 150px; object-fit: cover; border: 6px solid white;">
+                    </div>
+                    <div class="text-white px-3">
+                        <h4 class="fw-bold mb-1">Ахан Асқар Дайырғазыұлы</h4>
+                        <p class="mb-0" style="opacity: 0.95; font-size: 1.05rem;">Лейтенант</p>
+                    </div>
+                </div>
+                
+                <div class="card-body text-center py-4 px-4">
+                    <h6 class="fw-semibold text-primary mb-2">ИТК Жас Сарбаз клубының жетекшісі</h6>
+                    <p class="text-muted mb-0" style="line-height: 1.6;">
+                        НВП пәнінің оқытушысы<br>
+                        Педагог-ұйымдастырушы
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Директор колледжа -->
+        <div class="col-lg-5 col-md-6">
+            <div class="card border-0 shadow-lg h-100 leadership-card" 
+                 style="border-radius: 22px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                
+                <div class="text-center pt-4 pb-3" style="background: #1f2937;">
+                    <div class="mx-auto mb-3 position-relative" style="width: 150px; height: 150px;">
+                        <img src="{% static 'images/faina.jpg' %}" 
+                             alt="Буркутбаева Фаина Валиевна"
+                             class="rounded-circle shadow"
+                             style="width: 150px; height: 150px; object-fit: cover; border: 6px solid white;">
+                    </div>
+                    <div class="text-white px-3">
+                        <h4 class="fw-bold mb-1">Буркутбаева Фаина Валиевна</h4>
+                        <p class="mb-0" style="opacity: 0.95; font-size: 1.05rem;">Директор колледжа</p>
+                    </div>
+                </div>
+                
+                <div class="card-body text-center py-4 px-4">
+                    <h6 class="fw-semibold text-dark mb-2">Innovative Technical College</h6>
+                    <p class="text-muted mb-0" style="line-height: 1.6;">
+                        Жоғары білімді басшы
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .leadership-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.2) !important;
+    }
+</style>
+{% endblock %}

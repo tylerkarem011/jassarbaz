@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Жас Сарбазға қосылу — Jas Sarbaz{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-5 p-5 rounded-4" style="background: linear-gradient(135deg, #0d6efd, #003087);">
+        <div class="mb-4">
+            <img src="{% static 'images/logo2.png' %}" 
+                 alt="Jas Sarbaz" 
+                 style="max-height: 120px; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));">
+        </div>
+        
+        <h1 class="fw-bold display-4 text-white mb-3">Жас Сарбазға қосыл!</h1>
+        <p class="text-white fs-4 mb-4">Нағыз сарбаз бол, Отанға қызмет ет!</p>
+        
+        <a href="https://forms.gle/kWveC5V4q65M8VGG6" 
+           target="_blank"
+           class="btn btn-light btn-lg px-5 py-3 fw-bold shadow-lg">
+            <i class="fas fa-user-plus me-2"></i> ҚАЗІР ҚОСЫЛУ
+        </a>
+        
+        <p class="text-white mt-3 mb-0" style="opacity: 0.9;">
+            <small>Форма толтырыңыз — біз сізбен 1-2 күнде хабарласамыз</small>
+        </p>
+    </div>
+
+    <!-- Почему стоит вступить -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 text-center p-4" style="border-radius: 18px;">
+                <div class="mb-3">
+                    <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                </div>
+                <h5 class="fw-bold">Әскери дайындық</h5>
+                <p class="text-muted">Саптық, атыс, тактика, медицина — нағыз сарбаз боласыз</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 text-center p-4" style="border-radius: 18px;">
+                <div class="mb-3">
+                    <i class="fas fa-trophy fa-3x text-warning"></i>
+                </div>
+                <h5 class="fw-bold">Жетістіктер мен рейтинг</h5>
+                <p class="text-muted">Жарыс, медаль, сертификат, жеке рейтинг</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 text-center p-4" style="border-radius: 18px;">
+                <div class="mb-3">
+                    <i class="fas fa-users fa-3x text-success"></i>
+                </div>
+                <h5 class="fw-bold">Бірлік пен достық</h5>
+                <p class="text-muted">Нағыз ерлер командасы, өмірлік достар</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Требования -->
+    <div class="card border-0 shadow-sm mb-5" style="border-radius: 18px;">
+        <div class="card-body p-5">
+            <h4 class="fw-bold mb-4 text-center">Қосылу шарттары</h4>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-unstyled fs-5">
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i> 15 жастан бастап</li>
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i> ИТК студенті болу</li>
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i> Дене шынықтыру дайындығы</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-unstyled fs-5">
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i> Патриоттық сезім</li>
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i> Тәртіпті сақтау</li>
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i> Ұжымда жұмыс істей білу</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Финальная кнопка -->
+    <div class="text-center">
+        <a href="https://forms.gle/kWveC5V4q65M8VGG6" 
+           target="_blank"
+           class="btn btn-primary btn-lg px-5 py-3 fw-bold">
+            <i class="fas fa-user-plus me-2"></i> ЖАС САРБАЗҒА ҚОСЫЛУ
+        </a>
+        <p class="text-muted mt-3">Біз сізді күтеміз!</p>
+    </div>
+
+</div>
+{% endblock %}

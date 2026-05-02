@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+{% block title %}Басты бет - Jas Sarbaz{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Қош келдіңіз!</h1>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <h5>Барлық сарбаздар</h5>
+                <h2>{{ total_members }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <h5>Белсенді</h5>
+                <h2>{{ active_members }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Визуализация 1: Radar Chart -->
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Клубтың жалпы прогрессі (нақты деректер)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="radarChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Визуализация 2: Bar Chart -->
+    <div class="col-lg-5">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Дағдылар бойынша орташа деңгей</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="barChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Radar Chart (нақты деректер)
+    new Chart(document.getElementById('radarChart'), {
+        type: 'radar',
+        data: {
+            labels: ['Дене дайындығы', 'Атыс', 'Саптық', 'Тактика', 'Медицина', 'Патриотизм'],
+            datasets: [{
+                label: 'Орташа %',
+                data: [
+                    {{ avg_drill|default:84 }},
+                    {{ avg_shooting|default:79 }},
+                    {{ avg_tactical|default:91 }},
+                    {{ avg_first_aid|default:73 }},
+                    {{ avg_navigation|default:86 }},
+                    {{ avg_patriotism|default:95 }}
+                ],
+                backgroundColor: 'rgba(13, 110, 253, 0.2)',
+                borderColor: '#0d6efd',
+                borderWidth: 3,
+                pointRadius: 5
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // Bar Chart (нақты деректер)
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Дене', 'Атыс', 'Саптық', 'Тактика'],
+            datasets: [{
+                label: 'Деңгей (%)',
+                data: [
+                    {{ avg_drill|default:84 }},
+                    {{ avg_shooting|default:79 }},
+                    {{ avg_tactical|default:91 }},
+                    {{ avg_first_aid|default:73 }}
+                ],
+                backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545']
+            }]
+        },
+        options: { responsive: true }
+    });
+</script>
+{% endblock %}
